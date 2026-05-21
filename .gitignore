@@ -1,0 +1,11 @@
+# This repo tracks only AGENTS.md and this .gitignore.
+# Everything else in ~/.agents/ — symlinks, skill caches, agent definitions,
+# lockfiles — is local machine state and stays out of the repo.
+
+# Ignore everything by default, including dotfiles and subdirectories.
+*
+.*
+
+# Allow the files we want to track.
+!.gitignore
+!AGENTS.md
