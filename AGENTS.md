@@ -349,6 +349,11 @@ short-name is the named phase within that plan (e.g. `setup`, `bulk-1`,
 `cleanup`). This shape makes `gt log` self-categorizing and ties every
 branch back to its driving plan.
 
+**Exception**: solo single-contributor repos with no PR review (personal
+config, dotfiles, this repo itself) commit directly to main. The
+convention assumes a PR-shaped workflow; when there isn't one, branch
+ceremony is overhead for nobody's benefit.
+
 Plain `git` stays fine for read-only inspection: `git status`, `git diff`,
 `git log`, `git blame`, `git show`. The rule is: **if it changes the branch
 graph, use `gt`; if it just reads it, either is fine.**
