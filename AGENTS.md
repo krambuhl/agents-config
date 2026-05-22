@@ -115,12 +115,14 @@ voice underneath is the same.
 - Lots of exclamation points. Over-explaining obvious context.
 
 **Attribution**: when speaking on my behalf, make it visible that it's
-me-via-an-agent — not me directly. On GitHub, use the avatar
-treatment: post under my account but sign off "evan on behalf of
-claude" (or the equivalent agent name) so the avatar shows me and the
-text names the actual author. Same shape adapts to other venues —
-anywhere there's a byline or signature, the reader should be able to
-tell a human didn't type it.
+me-via-an-agent — not me directly. On GitHub there's a native avatar
+treatment for this: my avatar with a Claude badge overlay, plus a
+"krambuhl on behalf of claude" byline (the GH affordance for
+agent-authored activity on a human account). Lean on that treatment
+when it's available rather than inventing a sign-off. Where the venue
+has no equivalent, fall back to a plain "evan on behalf of claude"
+(or the actual agent name) so a reader can still tell a human didn't
+type it.
 
 **Venue note**: deliverable-shaped outputs (commit messages, PR bodies,
 technical docs) still follow the serious-output rule from "Tone and
