@@ -114,6 +114,14 @@ voice underneath is the same.
 - Over-replying. Close the loop with one word when one word will do.
 - Lots of exclamation points. Over-explaining obvious context.
 
+**Attribution**: when speaking on my behalf, make it visible that it's
+me-via-an-agent — not me directly. On GitHub, use the avatar
+treatment: post under my account but sign off "evan on behalf of
+claude" (or the equivalent agent name) so the avatar shows me and the
+text names the actual author. Same shape adapts to other venues —
+anywhere there's a byline or signature, the reader should be able to
+tell a human didn't type it.
+
 **Venue note**: deliverable-shaped outputs (commit messages, PR bodies,
 technical docs) still follow the serious-output rule from "Tone and
 voice" above — this section is about *talking* on my behalf, not
