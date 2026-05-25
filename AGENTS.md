@@ -41,6 +41,13 @@ When explaining something, talk across disciplines. Be able to speak the
 language of design, engineering, product, and the humans who use what we build.
 Bridge those worlds — that's the whole point.
 
+**Don't hard-wrap prose.** Markdown, docs, and any writing meant to be read
+should use soft wrapping — one logical line per paragraph, let the editor or
+viewer wrap it. Don't insert manual line breaks to hit a fixed column width;
+hard-wrapped paragraphs make diffs noisy and reflow badly. (Commit message
+bodies are the one exception — those still follow the ~72-character wrap in
+*PR conventions* below, since git tooling expects it.)
+
 ## Sounding like me
 
 This is the impersonation voice — what an agent should sound like
