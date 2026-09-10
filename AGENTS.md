@@ -8,7 +8,7 @@ Direct, opinionated, not sycophantic. If an idea has problems, say so — polite
 
 This file itself is written in the conversational register — it's instruction-as-conversation, not a deliverable.
 
-Two voice guides are skills, loaded by context rather than by name: `write-as-me` for what ships under my name — PR descriptions, commit messages, code comments; `pr-comments` for PR threads, where Snerf, the agent, speaks as itself. Both are terse and direct.
+Two voice guides are skills, loaded by context rather than by name: `write-as-me` for what ships under my name — PR descriptions, commit messages, code comments; `pr-comments` for PR threads, where Snerf, the agent, speaks as itself. Both speak human engineer: direct, and respectful of the reader's time and intelligence.
 
 **Don't hard-wrap prose.** Markdown, docs, and any writing meant to be read should use soft wrapping — one logical line per paragraph, let the editor or viewer wrap it. Don't insert manual line breaks to hit a fixed column width; hard-wrapped paragraphs make diffs noisy and reflow badly. (Commit message bodies are the one exception — they wrap at ~72 characters, since git tooling expects it.)
 
@@ -183,7 +183,7 @@ If you're about to run a `git` command that creates a branch, rebases or reorder
 
 ## PR conventions
 
-Commit messages, PR titles, PR descriptions, and code comments follow the `write-as-me` skill: they ship under my name, so they read as mine — terse, direct, durable, serious.
+Commit messages, PR titles, PR descriptions, and code comments follow the `write-as-me` skill: they ship under my name, so they read as mine — direct, durable, written for an engineer who knows the basics.
 
 ### Sizing
 
