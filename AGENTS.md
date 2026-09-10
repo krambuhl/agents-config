@@ -473,29 +473,49 @@ shows up in the runtime available-skills and available-subagents lists.
 
 ## Version control
 
-Default to Graphite (`gt`) for the branch and PR workflow. The three-phase
-decomposition pattern naturally produces stacks, and `gt` is built for that
-shape — each phase becomes a branch on top of the last, the whole stack gets
-reviewed together, and PRs land one at a time without unwinding the rest.
+Default to GitHub's native stacked pull requests for the branch and PR
+workflow, driven from the `gh stack` CLI extension (already installed in our
+environment). The three-phase decomposition pattern naturally produces
+stacks, and GitHub stacks are built for that shape — each phase becomes a
+branch on top of the last, every PR targets the one below it, the stack map
+lives in the PR UI itself, and PRs land bottom-up one at a time while GitHub
+rebases and retargets the layers above on its own servers.
 
-- `gt create` for new branches stacked on the current one — not `git checkout
-  -b`. New work always lands as a stacked branch, never a sibling off main
-  unless we're starting a fresh effort.
-- `gt modify` to amend or add commits to the current branch.
-- `gt submit` (or `gt submit --stack`) to push and open/update PRs for the
-  stack — not `git push` + `gh pr create`. `gt submit` automatically
-  annotates each PR with its stack position and dependencies; don't
-  hand-add "depends on #1234" lines, they go stale.
-- `gt sync` to pull main and restack open branches; `gt restack` after any
-  rebase or reorder.
-- `gt log short` / `gt log` to see the stack shape.
+- `gh stack init <branch>` to start a new stack off main; `gh stack add
+  <branch>` for each layer stacked on the current one — not `git checkout
+  -b`. Always pass the branch name (the convention below); left blank, the
+  tool invents a date-slug name. New work lands as a stacked branch, never
+  a sibling off main unless we're starting a fresh effort.
+- Plain `git commit` to add commits to the current layer. After changing a
+  lower layer, `gh stack rebase` restacks the layers above it.
+- `gh stack submit` to push every branch and open or update the PRs, linked
+  as one stack on GitHub — not `git push` + `gh pr create`. Stack position
+  and dependencies are native PR metadata; don't hand-add "depends on
+  #1234" lines, they go stale.
+- `gh stack sync` to pull main, drop merged layers, retarget what's left,
+  and restack; `gh stack push` to publish after a local rebase.
+- `gh stack view --json` to see the stack shape (without `--json` it opens
+  an interactive TUI you can't drive); `gh stack checkout` to jump to a
+  stack by number, PR, or branch.
+- `gh stack <command> --help` is the authority on flags — the extension is
+  in public preview and moves.
+
+**git-spice (`gs`) is the acceptable alternative** when you want richer
+local stack surgery: `gs up` / `gs down` to walk the stack, `gs branch
+create` to add a layer, `gs commit create` / `gs commit amend` (both restack
+the layers above automatically), `gs repo sync`, `gs stack restack`, `gs log
+short`, and `gs stack submit` to open the PRs. If `gs` opened the PRs, run
+`gh stack link` afterward with the PR numbers bottom to top so GitHub knows
+they're one stack and the native stack map shows up in the PR UI. Beyond
+that handoff, don't mix the two tools on a single stack — each tracks
+branch relationships its own way.
 
 **Branch names follow `ev-agent.<plan-identifier>.<phase-short-name>`.**
 Plan-identifier is the kebab-case slug of the PLAN.md or project the
 branch belongs to (e.g. `token-migration`, `layout-codemod`). Phase-
 short-name is the named phase within that plan (e.g. `setup`, `bulk-1`,
-`cleanup`). This shape makes `gt log` self-categorizing and ties every
-branch back to its driving plan.
+`cleanup`). This shape makes `gh stack view` (or `gs log short`)
+self-categorizing and ties every branch back to its driving plan.
 
 **Exception**: solo single-contributor repos with no PR review (personal
 config, dotfiles, this repo itself) commit directly to main. The
@@ -504,10 +524,12 @@ ceremony is overhead for nobody's benefit.
 
 Plain `git` stays fine for read-only inspection: `git status`, `git diff`,
 `git log`, `git blame`, `git show`. The rule is: **if it changes the branch
-graph, use `gt`; if it just reads it, either is fine.**
+graph, use the stack tool (`gh stack`, or `gs`); if it just reads it, either
+is fine.**
 
-If you're about to run a `git` command that creates, moves, or publishes a
-branch, stop and reach for the `gt` equivalent instead.
+If you're about to run a `git` command that creates a branch, rebases or
+reorders one, or publishes one, stop and reach for the `gh stack` (or `gs`)
+equivalent instead.
 
 ## PR conventions
 
