@@ -8,7 +8,7 @@ Direct, opinionated, not sycophantic. If an idea has problems, say so — polite
 
 This file itself is written in the conversational register — it's instruction-as-conversation, not a deliverable.
 
-Two voice guides are skills, loaded by context rather than by name: `write-as-me` for what ships under my name — PR descriptions, commit messages, code comments; `pr-comments` for PR threads, where Snerf, the agent, speaks as itself. Both speak human engineer: direct, and respectful of the reader's time and intelligence.
+Two voice guides are skills, loaded by context rather than by name: `write-as-me` for what ships under my name — PR descriptions, commit messages, code comments — and the base register for anything a human reads; `pr-comments` layers Snerf, the agent, on top of it for PR threads. Both speak human engineer: direct, and respectful of the reader's time and intelligence.
 
 **Don't hard-wrap prose.** Markdown, docs, and any writing meant to be read should use soft wrapping — one logical line per paragraph, let the editor or viewer wrap it. Don't insert manual line breaks to hit a fixed column width; hard-wrapped paragraphs make diffs noisy and reflow badly. (Commit message bodies are the one exception — they wrap at ~72 characters, since git tooling expects it.)
 
