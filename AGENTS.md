@@ -260,6 +260,11 @@ When this file and a project's `CLAUDE.md`/`AGENTS.md` conflict:
   Big changes happen through small, safe steps. Never knock the lights out.
 - **Maintainability is the long game.** Optimize for how long code will be
   useful and how easy it will be for the next person to understand.
+- **Durable over dated.** Anything that outlives the session — comments,
+  commit messages, PR bodies, docs — is written for a reader who has none
+  of this conversation. Describe the code and the decision, never the
+  process, the review, or where we are in a plan. Brief beats exhaustive:
+  say it once, then stop.
 - **Tech debt is a tool, not a failure.** Wield it intentionally. It's also a
   great candidate for background agent work with human review — don't
   oversell agent output, just do the work and let me evaluate it.
@@ -316,20 +321,14 @@ between design, engineering, and other disciplines at the company.
 - **Document confusing things.** Don't over-comment, but when something is
   genuinely non-obvious, explain it for the next person (human or agent).
 - **Comments are durable.** A comment describes the code as it stands, for
-  whoever reads it a year from now — never the change that produced it or
-  the conversation around it. That rules out migration narration
-  (`// migrated from Flex`, `// TODO: remove after phase 3`, `// new token
-  system`, `// was a Spacer`), review-facing notes (`// per review
-  feedback`, `// this is correct because…`), and play-by-play of what the
-  next line does. Those are you talking to the reviewer; they're noise the
-  moment the PR merges, and in a codemod wave they're noise five hundred
-  times over. The migration story lives in PLAN.md, the PR body, and the
-  commit message — not in the code. The one comment a temporary thing
-  *should* carry is the constraint a reader can't see: what a
-  compatibility shim is for and what makes it safe to delete. Write that
-  as a standing fact about the code ("supports callers still passing
-  `layout`; remove with the last of them"), not as a note about where we
-  are in the plan.
+  whoever reads it next — never the change that produced it. No migration
+  narration (`// migrated from Flex`, `// TODO: remove after phase 3`,
+  `// was a Spacer`), no review-facing notes (`// per review feedback`,
+  `// this is correct because…`), no play-by-play of the next line. The
+  migration story lives in PLAN.md and the PR body. The one note a
+  temporary thing should carry is what makes it safe to delete, written as
+  a standing fact: "supports callers still passing `layout`; remove with
+  the last of them."
 - **Write tests proactively.** Test real user functionality, not rote
   fundamentals — some assumptions are fine. For integration tests we
   use Playwright across the stack; before recommending a runner for a
@@ -409,7 +408,9 @@ These live in the repo alongside the work:
 
 The planning artifacts *are* the documentation. They explain why the migration
 is shaped the way it is, and they make the work parallelizable — multiple
-agent sessions can run different subplans simultaneously.
+agent sessions can run different subplans simultaneously. They're working
+documents, not essays: an inventory, a sequence, and the reasons, readable
+in one sitting.
 
 ## How I use agents
 
@@ -642,6 +643,10 @@ PR description archetypes by shape:
   needed) → `## Diff highlights` (what changed in the dep) →
   `## Rollout`. Auto-generated changelogs are welcome but the body
   should still name what *we* care about.
+
+Bodies describe the change, not the session that produced it: no "as
+discussed", "per review feedback", "first tried X". Complete where the
+archetype asks for it, terse everywhere else.
 
 All shapes include `## Rollout` and `## Checklist`:
 
