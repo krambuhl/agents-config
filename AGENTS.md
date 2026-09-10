@@ -8,9 +8,9 @@ Direct, opinionated, not sycophantic. If an idea has problems, say so — polite
 
 This file itself is written in the conversational register — it's instruction-as-conversation, not a deliverable.
 
-Two voice guides are skills, loaded by context rather than by name: `write-as-me` for messages I'll send myself, `pr-comments` for PR threads, where the agent speaks as itself, in character. PR bodies, commits, and code are mine and stay in the serious register.
+Two voice guides are skills, loaded by context rather than by name: `write-as-me` for what ships under my name — PR descriptions, commit messages, code comments; `pr-comments` for PR threads, where Snerf, the agent, speaks as itself. Both are terse and direct.
 
-**Don't hard-wrap prose.** Markdown, docs, and any writing meant to be read should use soft wrapping — one logical line per paragraph, let the editor or viewer wrap it. Don't insert manual line breaks to hit a fixed column width; hard-wrapped paragraphs make diffs noisy and reflow badly. (Commit message bodies are the one exception — those still follow the ~72-character wrap in *PR conventions* below, since git tooling expects it.)
+**Don't hard-wrap prose.** Markdown, docs, and any writing meant to be read should use soft wrapping — one logical line per paragraph, let the editor or viewer wrap it. Don't insert manual line breaks to hit a fixed column width; hard-wrapped paragraphs make diffs noisy and reflow badly. (Commit message bodies are the one exception — they wrap at ~72 characters, since git tooling expects it.)
 
 ## Collaboration style
 
@@ -45,7 +45,7 @@ When this file and a project's `CLAUDE.md`/`AGENTS.md` conflict:
 - **Simple over clever.** Be clear unless there's a real reason not to be. Basic is good. Readable is good. "Good enough for now" is a real answer.
 - **Incrementalism over rewrites.** Ship constantly without breaking things. Big changes happen through small, safe steps. Never knock the lights out.
 - **Maintainability is the long game.** Optimize for how long code will be useful and how easy it will be for the next person to understand.
-- **Don't waste people's time.** Length follows audience. Anything a human will read — comments, PR bodies, docs, messages — is brief and high-level: the reader gets the point in one pass and moves on. Anything only an agent will read — skills, subagent definitions, PROMPT.md files, replies to bot reviewers — can be as dense as the job needs. When both will read it, write for the human.
+- **Don't waste people's time.** Length follows audience. Anything a human will read — comments, PR bodies, docs, messages — is brief and high-level: the reader gets the point in one pass and moves on. Anything only an agent will read — skills, subagent definitions, PROMPT.md files — can be as dense as the job needs. When both will read it, write for the human.
 - **Durable over dated.** Anything that outlives the session is written for a reader who has none of this conversation. Describe the code and the decision, never the process, the review, or where we are in a plan.
 - **Tech debt is a tool, not a failure.** Wield it intentionally. It's also a great candidate for background agent work with human review — don't oversell agent output, just do the work and let me evaluate it.
 - **Detail-oriented in the long tail.** Parallel work is welcome. Background tasks, incremental cleanup, chipping away at things over time — that's the preferred mode.
@@ -183,56 +183,7 @@ If you're about to run a `git` command that creates a branch, rebases or reorder
 
 ## PR conventions
 
-### Commit messages
-
-- **Subject line**: descriptive verb, sentence case, under ~70 characters, no trailing period. Match the level of formality of the PR title.
-- **Body**: explain the *why*, not the *what*. The diff shows what; the body explains motivation, hidden constraints, surprising decisions. Blank line between subject and body; wrap at ~72 characters.
-- **Co-author trailer**: when an agent contributed substantively, end the message with `Co-Authored-By: <Agent Name> <email>`. Applies to any commit where the agent wrote meaningful content, not just whole-PR drives.
-- **Amend vs new commit**: prefer new commits over amending. Amending a pushed commit requires a force-push and rewrites history. Amend only before pushing, and only for unrelated mechanical cleanup (typo fix, forgotten file). Substantive changes always get their own commit.
-- **Avoid social-context subjects**: don't title commits `Fix typo`, `Address review`, `Apply suggestion`. Subject lines describe the change, not the conversation around it.
-
-### Titles
-
-- **Bracket prefix** for component-scoped work: `[Table] Add createAvatarColumn`, `[codemod] global tokens (components)`
-- **Descriptive verbs** for everything else: `Migrate shared utilities from moment-timezone to date-fns-tz`, `Remove creatorTheming layout prop`
-- Under 70 characters. No ticket IDs. No emoji.
-
-### Descriptions
-
-PR description archetypes by shape:
-
-- **Architectural PR** (new components, API changes): `## Motivation` → `## Solution` → `## Verification`. Motivation explains the *why* at a conceptual level — design philosophy, not just requirements. Solution names every behavioral shift and API change at the level a reviewer needs to navigate the diff — the diff itself is the file-by-file record.
-
-- **Migration PR**: `## Summary` with bullet points, then a table of files changed with complexity notes. `## Test plan` with checkbox lists of specific routes to verify.
-
-- **Bug fix PR**: `## Problem` (what was happening, ideally with a repro or bug-report link) → `## Root cause` (the actual mechanism, not just the symptom) → `## Fix` (what changed and why this fix vs alternatives) → `## Verification` (how you confirmed it).
-
-- **Refactor PR** (no behavioral change): `## Motivation` (why the current shape is wrong) → `## Before / After` (structural change) → `## Verification` that behavior is preserved. If tests had to change, the PR isn't a pure refactor — split it.
-
-- **Dependency PR**: `## Why this bump` (security, deprecation, feature needed) → `## Diff highlights` (what changed in the dep) → `## Rollout`. Auto-generated changelogs are welcome but the body should still name what *we* care about.
-
-Bodies describe the change, not the session that produced it: no "as discussed", "per review feedback", "first tried X". High-level, for a reviewer deciding where to look — the diff is the detail.
-
-All shapes include `## Rollout` and `## Checklist`:
-
-```markdown
-## Rollout
-- Risk level: low / medium / high
-- Revert: single PR revert sufficient / requires forward fix /
-  coordinated revert across multiple PRs
-- Feature flag or staged rollout if applicable
-- Anything ops should watch post-deploy (specific dashboards, error
-  rates, latency)
-
-## Checklist
-- [ ] Verified locally
-- [ ] Tests added or updated
-- [ ] i18n strings extracted (if user-facing copy changed)
-- [ ] Accessibility spot-check (keyboard, focus, ARIA)
-- [ ] Happo green
-```
-
-Adapt the items to fit the actual PR — a refactor doesn't need an i18n line, a backend-only change doesn't need a Happo line. The point is a predictable shape, not rote box-checking.
+Commit messages, PR titles, PR descriptions, and code comments follow the `write-as-me` skill: they ship under my name, so they read as mine — terse, direct, durable, serious.
 
 ### Sizing
 
@@ -248,5 +199,5 @@ Concrete splitting signals — if any of these apply, split the PR:
 
 ### Review comments and thread replies
 
-Both follow the `pr-comments` skill: the agent's own voice for the thread (the PR body and the code are mine; the conversation about them is visibly the agent's), how to triage a review, what you may post without me, what routes back with a draft, and how long a reply gets depending on who's reading it.
+Both follow the `pr-comments` skill: Snerf's voice for the thread (the PR body and the code are mine; the conversation about them is visibly an agent's), how to triage a review, what you may post without me, and what routes back with a draft.
 
