@@ -122,13 +122,15 @@ When this file and a project's `CLAUDE.md`/`AGENTS.md` conflict:
 - **Simple over clever.** Be clear unless there's a real reason not to be. Basic is good. Readable is good. "Good enough for now" is a real answer.
 - **Incrementalism over rewrites.** Ship constantly without breaking things. Big changes happen through small, safe steps. Never knock the lights out.
 - **Maintainability is the long game.** Optimize for how long code will be useful and how easy it will be for the next person to understand.
-- **Durable over dated.** Anything that outlives the session — comments, commit messages, PR bodies, docs — is written for a reader who has none of this conversation. Describe the code and the decision, never the process, the review, or where we are in a plan. Brief beats exhaustive: say it once, then stop.
+- **Don't waste people's time.** Length follows audience. Anything a human will read — comments, PR bodies, docs, messages — is brief and high-level: the reader gets the point in one pass and moves on. Anything only an agent will read — skills, subagent definitions, PROMPT.md files — can be as dense as the job needs. When both will read it, write for the human.
+- **Durable over dated.** Anything that outlives the session is written for a reader who has none of this conversation. Describe the code and the decision, never the process, the review, or where we are in a plan.
 - **Tech debt is a tool, not a failure.** Wield it intentionally. It's also a great candidate for background agent work with human review — don't oversell agent output, just do the work and let me evaluate it.
 - **Detail-oriented in the long tail.** Parallel work is welcome. Background tasks, incremental cleanup, chipping away at things over time — that's the preferred mode.
 
 ## What I care about
 
 - Human behavior and dignity in how we build things.
+- Not wasting people's time. Period. A long comment, a padded PR body, a doc nobody can skim — each one spends attention that wasn't yours to spend.
 - Bridging the gap between design and engineering — understanding the tradeoffs that affect users, designers, and engineers across web, iOS, and Android.
 - ADHD-friendly flow: meandering is not wasted time. Interesting side conversations are features, not bugs. But stay motivated and focused together — the wandering should serve the work.
 - Learning through doing. Understanding through conversation. Joy in the craft.
@@ -156,7 +158,7 @@ Tokens are the semantic layer between Figma and the codebase. Much of my current
 
 - **Bias toward correctness and understandability.** Every consumer of this work is another engineer. Be transparent with your audience.
 - **Document confusing things.** Don't over-comment, but when something is genuinely non-obvious, explain it for the next person (human or agent).
-- **Comments are durable.** A comment describes the code as it stands, for whoever reads it next — never the change that produced it. No migration narration (`// migrated from Flex`, `// TODO: remove after phase 3`, `// was a Spacer`), no review-facing notes (`// per review feedback`, `// this is correct because…`), no play-by-play of the next line. The migration story lives in PLAN.md and the PR body. The one note a temporary thing should carry is what makes it safe to delete, written as a standing fact: "supports callers still passing `layout`; remove with the last of them."
+- **Comments are short and durable.** One or two lines describing the code as it stands, for whoever reads it next — never the change that produced it. No migration narration (`// migrated from Flex`, `// TODO: remove after phase 3`, `// was a Spacer`), no review-facing notes (`// per review feedback`, `// this is correct because…`), no play-by-play of the next line. If a comment wants a paragraph, the code wants restructuring or the explanation belongs in a doc. The one note a temporary thing should carry is what makes it safe to delete, as a standing fact: "supports callers still passing `layout`; remove with the last of them."
 - **Write tests proactively.** Test real user functionality, not rote fundamentals — some assumptions are fine. For integration tests we use Playwright across the stack; before recommending a runner for a new project, check what's actually installed (`package.json`, `playwright.config.*` or `cypress.config.*`) rather than assuming. Plans and specs should lean TDD-shaped when it makes sense. Committed tests are sized like their neighbors — about one focused test per behavior; scratch checks stay scratch.
 - **Don't over-engineer.** No extra abstractions, no speculative features, no boilerplate for its own sake. The simplest thing that works and reads well. A bug fix doesn't need surrounding cleanup; adjacent things you notice go in your summary as follow-ups, not in this diff, unless the ask can't work without them.
 
@@ -170,7 +172,7 @@ Large projects almost always decompose into three phases:
 
 1. **Setup / gate**: Make a backward-compatible change that prepares the world. Add the new abstraction alongside the old one. Introduce a compatibility layer, add a lint rule, create the migration target. Nothing breaks yet — the old path still works. This PR is often small and should be the most carefully reviewed.
 
-2. **Bulk migration**: One or more PRs that do the mechanical work. These are high-volume, low-judgment — codemods, find-and-replace, pattern-by-pattern waves. Often agent-driven. Split by directory, by pattern complexity, or by risk tier — whatever keeps each PR to a single reviewable unit. The simplest patterns go first. Complexity escalates across waves, not within them. Code coming out of a wave reads as if it had always been written that way — no `// migrated` breadcrumbs, no "phase 2 of" markers (see *Comments are durable* under *Coding expectations*).
+2. **Bulk migration**: One or more PRs that do the mechanical work. These are high-volume, low-judgment — codemods, find-and-replace, pattern-by-pattern waves. Often agent-driven. Split by directory, by pattern complexity, or by risk tier — whatever keeps each PR to a single reviewable unit. The simplest patterns go first. Complexity escalates across waves, not within them. Code coming out of a wave reads as if it had always been written that way — no `// migrated` breadcrumbs, no "phase 2 of" markers (see *Comments are short and durable* under *Coding expectations*).
 
 3. **Cleanup**: Remove the backward-compatibility layer, delete the old code, drop the lint rule exceptions, and take the shim's removal-condition comment with it. This is the "close the loop" PR. It should be small and satisfying.
 
@@ -188,11 +190,11 @@ When the bulk migration phase has multiple waves, sequence by risk:
 
 For large migrations, write the plan as markdown before writing any code. These live in the repo alongside the work:
 
-- **PLAN.md**: The overall strategy, pattern inventory, and wave breakdown.
-- **SUBPLAN files**: One per pattern or wave, with file#line references, migration approach, and validation strategies.
-- **PROMPT.md files**: Templates for Claude Web sessions, designed to be copy-pasted into new sessions for parallel execution.
+- **PLAN.md**: The overall strategy, pattern inventory, and wave breakdown. Humans read this one — high-level, skimmable in one sitting.
+- **SUBPLAN files**: One per pattern or wave, with file#line references, migration approach, and validation strategies. Mostly agent-consumed; density is fine.
+- **PROMPT.md files**: Templates for Claude Web sessions, designed to be copy-pasted into new sessions for parallel execution. Agent-only; as dense as the job needs.
 
-The planning artifacts *are* the documentation. They explain why the migration is shaped the way it is, and they make the work parallelizable — multiple agent sessions can run different subplans simultaneously. They're working documents, not essays: an inventory, a sequence, and the reasons, readable in one sitting.
+The planning artifacts *are* the documentation. They explain why the migration is shaped the way it is, and they make the work parallelizable — multiple agent sessions can run different subplans simultaneously.
 
 ## How I use agents
 
@@ -276,7 +278,7 @@ If you're about to run a `git` command that creates a branch, rebases or reorder
 
 PR description archetypes by shape:
 
-- **Architectural PR** (new components, API changes): `## Motivation` → `## Solution` → `## Verification`. Motivation explains the *why* at a conceptual level — design philosophy, not just requirements. Solution is exhaustive: every file, every type change, every behavioral shift.
+- **Architectural PR** (new components, API changes): `## Motivation` → `## Solution` → `## Verification`. Motivation explains the *why* at a conceptual level — design philosophy, not just requirements. Solution names every behavioral shift and API change at the level a reviewer needs to navigate the diff — the diff itself is the file-by-file record.
 
 - **Migration PR**: `## Summary` with bullet points, then a table of files changed with complexity notes. `## Test plan` with checkbox lists of specific routes to verify.
 
@@ -286,7 +288,7 @@ PR description archetypes by shape:
 
 - **Dependency PR**: `## Why this bump` (security, deprecation, feature needed) → `## Diff highlights` (what changed in the dep) → `## Rollout`. Auto-generated changelogs are welcome but the body should still name what *we* care about.
 
-Bodies describe the change, not the session that produced it: no "as discussed", "per review feedback", "first tried X". Complete where the archetype asks for it, terse everywhere else.
+Bodies describe the change, not the session that produced it: no "as discussed", "per review feedback", "first tried X". High-level, for a reviewer deciding where to look — the diff is the detail.
 
 All shapes include `## Rollout` and `## Checklist`:
 
