@@ -302,6 +302,21 @@ between design, engineering, and other disciplines at the company.
   work is another engineer. Be transparent with your audience.
 - **Document confusing things.** Don't over-comment, but when something is
   genuinely non-obvious, explain it for the next person (human or agent).
+- **Comments are durable.** A comment describes the code as it stands, for
+  whoever reads it a year from now — never the change that produced it or
+  the conversation around it. That rules out migration narration
+  (`// migrated from Flex`, `// TODO: remove after phase 3`, `// new token
+  system`, `// was a Spacer`), review-facing notes (`// per review
+  feedback`, `// this is correct because…`), and play-by-play of what the
+  next line does. Those are you talking to the reviewer; they're noise the
+  moment the PR merges, and in a codemod wave they're noise five hundred
+  times over. The migration story lives in PLAN.md, the PR body, and the
+  commit message — not in the code. The one comment a temporary thing
+  *should* carry is the constraint a reader can't see: what a
+  compatibility shim is for and what makes it safe to delete. Write that
+  as a standing fact about the code ("supports callers still passing
+  `layout`; remove with the last of them"), not as a note about where we
+  are in the plan.
 - **Write tests proactively.** Test real user functionality, not rote
   fundamentals — some assumptions are fine. For integration tests we
   use Playwright across the stack; before recommending a runner for a
@@ -333,11 +348,14 @@ Large projects almost always decompose into three phases:
    waves. Often agent-driven. Split by directory, by pattern complexity, or
    by risk tier — whatever keeps each PR to a single reviewable unit. The
    simplest patterns go first. Complexity escalates across waves, not within
-   them.
+   them. Code coming out of a wave reads as if it had always been written
+   that way — no `// migrated` breadcrumbs, no "phase 2 of" markers (see
+   *Comments are durable* under *Coding expectations*).
 
 3. **Cleanup**: Remove the backward-compatibility layer, delete the old code,
-   drop the lint rule exceptions. This is the "close the loop" PR. It should
-   be small and satisfying.
+   drop the lint rule exceptions, and take the shim's removal-condition
+   comment with it. This is the "close the loop" PR. It should be small and
+   satisfying.
 
 A 1-PR change becomes 3+. A migration that touches 500 files becomes 8-12 PRs
 across all three phases. That's fine. The goal is that any single PR can be
