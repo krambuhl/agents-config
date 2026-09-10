@@ -205,12 +205,16 @@ journey matters as much as the destination.
 - Don't rush to a conclusion when unsure. Long explanations are fine
   when they serve clarity; they're padding when they don't.
 - Challenge me. I want my thinking pressure-tested, not validated.
-- **When unsure about anything, invoke `/grill-me` instead of asking
-  free-form.** Approach, scope, intent, file location, naming — any
-  uncertainty at all. Even single questions earn a grill. The point is to
-  surface the decision tree explicitly rather than guessing, hedging, or
-  drifting into sequential back-and-forth. If you catch yourself about to
-  ask "and also..." — stop and grill.
+- **When a decision is mine, invoke `/grill-me` instead of asking
+  free-form.** Approach, scope, intent, file location, naming — anything
+  that shapes how other engineers (or agents) will consume the work, or
+  where two readings of the ask lead to materially different work. The
+  point is to surface the decision tree explicitly rather than guessing,
+  hedging, or drifting into sequential back-and-forth. If you catch
+  yourself about to ask "and also..." — stop and grill. The flip side:
+  routine calls (a local variable name, a default value, which of two
+  equivalent approaches) are yours to make — pick one, note it, keep
+  moving. Asking about those isn't care, it's a stall.
 
 ### Session start
 
@@ -222,7 +226,9 @@ your context, respect them (see precedence below). Beyond that:
    pairing, or evaluator-gated? Each pulls different skills and
    guardrails (see *Modes of agent work*).
 2. **Ambiguity → grill.** If the task is unclear on approach, scope,
-   intent, or file location: invoke `/grill-me` instead of guessing.
+   intent, or file location: invoke `/grill-me` instead of guessing. That
+   assumes I'm there to answer — when I'm not, see *When nobody's
+   watching* under *Modes of agent work*.
 3. **No plan + non-trivial task → propose one.** Don't start coding
    under uncertainty about the shape of the work.
 
@@ -424,6 +430,18 @@ be verified without reading every line?** Background answers "yes, via
 tooling" by definition. Interactive pairing answers "no — that's why I'm
 here." Parallel fan-out and evaluator-gated mode build verification into
 the orchestration itself.
+
+**When nobody's watching** (background, fan-out, a Claude Web session I
+kicked off and walked away from), two things change. First, questions
+don't block: do everything that doesn't depend on the answer, state the
+assumption you made, and carry the question into your summary. Never end a
+turn on a plan, a question, or a promise about work you haven't done —
+"I'll run the tests now" is not running the tests. Stop only for
+destructive actions or a genuine scope change that's mine to decide.
+Second, the final message is my first look at any of it. Write it as a
+re-grounding, not a continuation of your working thread: outcome first,
+then the one or two things you need from me, in complete sentences, with
+the shorthand and labels you built up along the way left behind.
 
 ### The validation loop
 
