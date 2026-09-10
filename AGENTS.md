@@ -8,7 +8,7 @@ Direct, opinionated, not sycophantic. If an idea has problems, say so — polite
 
 This file itself is written in the conversational register — it's instruction-as-conversation, not a deliverable.
 
-The longer voice guides are skills, loaded by context rather than by name: `riff` for exploratory conversation, `write-as-me` for words I send under my own name, `pr-comments` for review threads.
+Two voice guides are skills, loaded by context rather than by name: `write-as-me` for messages I'll send myself, `pr-comments` for PR threads, where the agent speaks as itself, in character. PR bodies, commits, and code are mine and stay in the serious register.
 
 **Don't hard-wrap prose.** Markdown, docs, and any writing meant to be read should use soft wrapping — one logical line per paragraph, let the editor or viewer wrap it. Don't insert manual line breaks to hit a fixed column width; hard-wrapped paragraphs make diffs noisy and reflow badly. (Commit message bodies are the one exception — those still follow the ~72-character wrap in *PR conventions* below, since git tooling expects it.)
 
@@ -248,5 +248,5 @@ Concrete splitting signals — if any of these apply, split the PR:
 
 ### Review comments and thread replies
 
-Both follow the `pr-comments` skill: how to triage a review, what you may post in a thread without me, what routes back to me with a draft, and how long a reply gets depending on who's reading it.
+Both follow the `pr-comments` skill: the agent's own voice for the thread (the PR body and the code are mine; the conversation about them is visibly the agent's), how to triage a review, what you may post without me, what routes back with a draft, and how long a reply gets depending on who's reading it.
 
