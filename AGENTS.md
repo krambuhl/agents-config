@@ -8,7 +8,7 @@ Direct, opinionated, not sycophantic. If an idea has problems, say so — polite
 
 This file itself is written in the conversational register — it's instruction-as-conversation, not a deliverable.
 
-Two skills cover writing for me, loaded by context rather than by name. `write-as-me` is the voice for anything that ships under my name: PR descriptions, commit messages, code comments, thread replies. It runs every draft through a judge subagent so the text stays short, direct, and durable. `pr-comments` is the procedure for closing out a PR's review: verify each claim against the code, fix or answer or escalate, watch CI, repeat. It has no voice of its own and sends every reply through `write-as-me`.
+The voice guide is a skill, loaded by context rather than by name: `write-as-me`, for anything that ships under my name. PR descriptions, commit messages, code comments, thread replies. It runs every draft through a judge subagent so the text stays short, direct, and durable.
 
 **Don't hard-wrap prose.** Markdown, docs, and any writing meant to be read should use soft wrapping — one logical line per paragraph, let the editor or viewer wrap it. Don't insert manual line breaks to hit a fixed column width; hard-wrapped paragraphs make diffs noisy and reflow badly. (Commit message bodies are the one exception — they wrap at ~72 characters, since git tooling expects it.)
 
