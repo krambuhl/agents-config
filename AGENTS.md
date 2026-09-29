@@ -152,10 +152,14 @@ For PR-shaped agent work: agents typically write the first commit(s), I review o
 
 ### Building agent infrastructure
 
-A meaningful share of my work is building tools for agents to use. The substrate ships as plugins from the `krambuhl` marketplace (`krambuhl/agents`): `commons`, `guild`, `loom`, and `ev`, with `agent-loop-full` as the bundle that installs them all. It breaks into families:
+A meaningful share of my work is building tools for agents to use. The substrate ships as plugins from the `krambuhl` marketplace (`krambuhl/agents`) — `commons`, `guild`, `loom`, `ev`, and `agent-loop-full`, which installs the other four — and breaks into families:
 
-- **Skills**: Reusable workflows invoked via the `Skill` tool or `/<name>` slash commands. Families include multi-agent coordination (`guild-*` — `guild-spawn`, `guild-plan`, `guild-validate`), execution loops (`ev-*` — `ev-run`, `ev-goal`, `ev-loop-interactive`, `ev-loop-confidence`), project lifecycle (`loom-*` — `loom-research`, `loom-plan`, `loom-archive`, and friends), and standalone utilities from `commons` (`grill-me`, `find-skills`, `review-skill`, `write-as-me`, `pr-comments`).
-- **Subagents**: Specialist agents invoked via the `Agent` tool. The guild families split by role: `research-*` gathers facts, `plan-*` contributes to design panels, `implementer-*` writes the code, `evaluator-*` reviews it as an antagonist, and `fixer-*` addresses what the evaluators flag. `commons` adds `writing-judge`, which scores drafts for `write-as-me`.
+- **Skills**: Reusable workflows invoked via the `Skill` tool or `/<name>` slash commands.
+  - `guild-*` coordinates agents: `guild-spawn`, `guild-plan`, `guild-validate`, and `guild-compile`.
+  - `ev-*` runs execution loops: `ev-run`, `ev-goal`, `ev-loop-interactive`, `ev-loop-confidence`.
+  - `loom-*` owns the project lifecycle: `loom-research`, `loom-plan`, `loom-revise-plan`, `loom-adr`, `loom-archive`. `loom-runbook` and `loom-migrate` track a migration at its work sites instead of in a PLAN.md.
+  - `commons` holds the standalone utilities: `grill-me`, `find-skills`, `review-skill`, `write-as-me`, `pr-comments`.
+- **Subagents**: Specialist agents invoked via the `Agent` tool. The guild families split by role: `research-*` gathers facts, `plan-*` contributes to design panels, `implementer-*` writes the code, `evaluator-*` reviews it as an antagonist, and `fixer-*` addresses what the evaluators flag. Each one is a generated cell of personality × domain × phase, so change `plugins/guild/modes/axes.toml` and rerun `guild-compile` rather than editing an agent file. `commons` adds `writing-judge`, which scores drafts for `write-as-me`.
 - **Migration prompts**: `PROMPT.md` files in project repos that template fresh sessions for parallel execution of migration subplans.
 
 This is meta-work, but it compounds. A good skill, agent, or prompt file means every future session in that area starts closer to the right answer. Skill and agent families decay slowly enough that the names above are worth keeping current — but the authoritative inventory is whatever shows up in the runtime available-skills and available-subagents lists.
