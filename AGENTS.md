@@ -45,7 +45,7 @@ When this file and a project's `CLAUDE.md`/`AGENTS.md` conflict:
 - **Simple over clever.** Be clear unless there's a real reason not to be. Basic is good. Readable is good. "Good enough for now" is a real answer.
 - **Incrementalism over rewrites.** Ship constantly without breaking things. Big changes happen through small, safe steps. Never knock the lights out.
 - **Maintainability is the long game.** Optimize for how long code will be useful and how easy it will be for the next person to understand.
-- **Don't waste people's time.** Length follows audience. Anything a human will read — comments, PR bodies, docs, messages — is brief and high-level: the reader gets the point in one pass and moves on. Anything only an agent will read — skills, subagent definitions, PROMPT.md files — can be as dense as the job needs. When both will read it, write for the human.
+- **Don't waste people's time.** Length follows audience. Anything a human will read — comments, PR bodies, docs, messages — is brief and high-level: the reader gets the point in one pass and moves on. Anything only an agent will read — skills, subagent definitions, `[project-name].prompt` and `[project-name].context` documents — can be as dense as the job needs. When both will read it, write for the human.
 - **Durable over dated.** Anything that outlives the session is written for a reader who has none of this conversation. Describe the code and the decision, never the process, the review, or where we are in a plan.
 - **Tech debt is a tool, not a failure.** Wield it intentionally. It's also a great candidate for background agent work with human review — don't oversell agent output, just do the work and let me evaluate it.
 - **Detail-oriented in the long tail.** Parallel work is welcome. Background tasks, incremental cleanup, chipping away at things over time — that's the preferred mode.
@@ -109,15 +109,15 @@ When the bulk migration phase has multiple waves, sequence by risk:
 - **Escalate judgment gradually.** Patterns requiring contextual decisions (which CSS property maps to which prop, whether a Spacer should become a div or a Stack) come in later waves after the approach is proven.
 - **Isolate the weird ones.** Edge cases that don't fit any pattern get their own small PRs at the end, with extra review attention.
 
-### Planning artifacts
+### Planning in Linear
 
-For large migrations, write the plan as markdown before writing any code. These live in the repo alongside the work:
+Project tracking lives in Linear, not the repo. Don't commit planning files. Anything non-trivial gets a Linear project, and its working state lives in the project's resources as three documents named after the project (e.g. `token-migration.plan`):
 
-- **PLAN.md**: The overall strategy, pattern inventory, and wave breakdown. Humans read this one — high-level, skimmable in one sitting.
-- **SUBPLAN files**: One per pattern or wave, with file#line references, migration approach, and validation strategies. Mostly agent-consumed; density is fine.
-- **PROMPT.md files**: Templates for Claude Web sessions, designed to be copy-pasted into new sessions for parallel execution. Agent-only; as dense as the job needs.
+- **`[project-name].plan`**: The goal and how we get there — strategy, pattern inventory, phase and wave breakdown. Humans read this one; keep it skimmable in one sitting. Write it before any code.
+- **`[project-name].prompt`**: Literal text to paste into a new agent session, standing alone with no other context. When the work fans out, the prompt points the session at its wave's issue for the specifics. Agent-only; as dense as the job needs.
+- **`[project-name].context`**: Long-term memory for the effort — decisions, gotchas, file#line references, anything an agent would otherwise rediscover. Read it at the start of a session and write to it before context runs out.
 
-The planning artifacts *are* the documentation. They explain why the migration is shaped the way it is, and they make the work parallelizable — multiple agent sessions can run different subplans simultaneously.
+Progress lives in Linear itself, not in a document: one issue per pattern or wave, milestones for phases, and status, PR links, and project updates kept current as work lands, so any session can see where the last one stopped. The repo holds the code and the docs that describe it. When the effort produces something that stays true after it ships (how a system works, why an abstraction is shaped the way it is), that part moves into the repo as real documentation.
 
 ## How I use agents
 
@@ -156,7 +156,7 @@ A meaningful share of my work is building tools for agents to use. The substrate
 
 - **Skills**: Reusable workflows invoked via the `Skill` tool or `/<name>` slash commands. Families include multi-agent coordination (`guild-*` — `guild-spawn`, `guild-plan`, `guild-validate`), execution loops (`ev-*` — `ev-run`, `ev-goal`, `ev-loop-interactive`, `ev-loop-confidence`), project lifecycle (`loom-*` — `loom-research`, `loom-plan`, `loom-archive`, and friends), and standalone utilities from `commons` (`grill-me`, `find-skills`, `review-skill`, `write-as-me`, `pr-comments`).
 - **Subagents**: Specialist agents invoked via the `Agent` tool. The guild families split by role: `research-*` gathers facts, `plan-*` contributes to design panels, `implementer-*` writes the code, `evaluator-*` reviews it as an antagonist, and `fixer-*` addresses what the evaluators flag. `commons` adds `writing-judge`, which scores drafts for `write-as-me`.
-- **Migration prompts**: `PROMPT.md` files in project repos that template fresh sessions for parallel execution of migration subplans.
+- **Linear project resources**: `[project-name].plan`, `.prompt`, and `.context` documents that let fresh sessions pick up an effort, or run its waves in parallel, without the conversation that started it.
 
 This is meta-work, but it compounds. A good skill, agent, or prompt file means every future session in that area starts closer to the right answer. Skill and agent families decay slowly enough that the names above are worth keeping current — but the authoritative inventory is whatever shows up in the runtime available-skills and available-subagents lists.
 
@@ -173,7 +173,7 @@ Default to GitHub's native stacked pull requests for the branch and PR workflow,
 
 **git-spice (`gs`) is the acceptable alternative** when you want richer local stack surgery: `gs up` / `gs down` to walk the stack, `gs branch create` to add a layer, `gs commit create` / `gs commit amend` (both restack the layers above automatically), `gs repo sync`, `gs stack restack`, `gs log short`, and `gs stack submit` to open the PRs. If `gs` opened the PRs, run `gh stack link` afterward with the PR numbers bottom to top so GitHub knows they're one stack and the native stack map shows up in the PR UI. Beyond that handoff, don't mix the two tools on a single stack — each tracks branch relationships its own way.
 
-**Branch names follow `ev-agent.<plan-identifier>.<phase-short-name>`.** Plan-identifier is the kebab-case slug of the PLAN.md or project the branch belongs to (e.g. `token-migration`, `layout-codemod`). Phase-short-name is the named phase within that plan (e.g. `setup`, `bulk-1`, `cleanup`). This shape makes `gh stack view` (or `gs log short`) self-categorizing and ties every branch back to its driving plan.
+**Branch names follow `ev-agent.<plan-identifier>.<phase-short-name>`.** Plan-identifier is the kebab-case slug of the Linear project the branch belongs to (e.g. `token-migration`, `layout-codemod`). Phase-short-name is the named phase within that plan (e.g. `setup`, `bulk-1`, `cleanup`). This shape makes `gh stack view` (or `gs log short`) self-categorizing and ties every branch back to its driving plan. Include the Linear issue ID in the PR title or body so the PR links back to the issue.
 
 **Exception**: solo single-contributor repos with no PR review (personal config, dotfiles, this repo itself) commit directly to main. The convention assumes a PR-shaped workflow; when there isn't one, branch ceremony is overhead for nobody's benefit.
 
