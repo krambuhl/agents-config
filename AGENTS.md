@@ -111,14 +111,13 @@ When the bulk migration phase has multiple waves, sequence by risk:
 
 ### Planning in Linear
 
-Project tracking lives in Linear, not the repo. Don't commit planning files. Anything non-trivial gets a Linear project, and its working state lives in the project's resources as four documents, named `<name>.<kind>` (e.g. `token-migration.plan`):
+Project tracking lives in Linear, not the repo. Don't commit planning files. Anything non-trivial gets a Linear project, and its working state lives in the project's resources as three documents, named `<name>.<kind>` (e.g. `token-migration.plan`):
 
 - **`.plan`**: The goal and how we get there — strategy, pattern inventory, phase and wave breakdown. Humans read this one; keep it skimmable in one sitting. Write it before any code.
 - **`.prompt`**: Literal text to paste into a new agent session, standing alone with no other context. One per parallel workstream when the work fans out (`token-migration.bulk-1.prompt`). Agent-only; as dense as the job needs.
-- **`.manifest`**: Progress. What's done, what's in flight, what's next, with links to PRs. Update it as work lands so any session can pick up where the last one stopped.
 - **`.context`**: Long-term memory for the effort — decisions, gotchas, file#line references, anything an agent would otherwise rediscover. Read it at the start of a session and write to it before context runs out.
 
-Issues still track individual units of work (one per pattern or wave), with milestones for phases. The repo holds the code and the docs that describe it. When the effort produces something that stays true after it ships (how a system works, why an abstraction is shaped the way it is), that part moves into the repo as real documentation.
+Progress lives in Linear itself, not in a document: one issue per pattern or wave, milestones for phases, and status, PR links, and project updates kept current as work lands, so any session can see where the last one stopped. The repo holds the code and the docs that describe it. When the effort produces something that stays true after it ships (how a system works, why an abstraction is shaped the way it is), that part moves into the repo as real documentation.
 
 ## How I use agents
 
@@ -157,7 +156,7 @@ A meaningful share of my work is building tools for agents to use. The substrate
 
 - **Skills**: Reusable workflows invoked via the `Skill` tool or `/<name>` slash commands. Families include multi-agent coordination (`guild-*` — `guild-spawn`, `guild-plan`, `guild-validate`), execution loops (`ev-*` — `ev-run`, `ev-goal`, `ev-loop-interactive`, `ev-loop-confidence`), project lifecycle (`loom-*` — `loom-research`, `loom-plan`, `loom-archive`, and friends), and standalone utilities from `commons` (`grill-me`, `find-skills`, `review-skill`, `write-as-me`, `pr-comments`).
 - **Subagents**: Specialist agents invoked via the `Agent` tool. The guild families split by role: `research-*` gathers facts, `plan-*` contributes to design panels, `implementer-*` writes the code, `evaluator-*` reviews it as an antagonist, and `fixer-*` addresses what the evaluators flag. `commons` adds `writing-judge`, which scores drafts for `write-as-me`.
-- **Linear project resources**: `.plan`, `.prompt`, `.manifest`, and `.context` documents that let fresh sessions pick up an effort, or run its waves in parallel, without the conversation that started it.
+- **Linear project resources**: `.plan`, `.prompt`, and `.context` documents that let fresh sessions pick up an effort, or run its waves in parallel, without the conversation that started it.
 
 This is meta-work, but it compounds. A good skill, agent, or prompt file means every future session in that area starts closer to the right answer. Skill and agent families decay slowly enough that the names above are worth keeping current — but the authoritative inventory is whatever shows up in the runtime available-skills and available-subagents lists.
 
