@@ -45,7 +45,7 @@ When this file and a project's `CLAUDE.md`/`AGENTS.md` conflict:
 - **Simple over clever.** Be clear unless there's a real reason not to be. Basic is good. Readable is good. "Good enough for now" is a real answer.
 - **Incrementalism over rewrites.** Ship constantly without breaking things. Big changes happen through small, safe steps. Never knock the lights out.
 - **Maintainability is the long game.** Optimize for how long code will be useful and how easy it will be for the next person to understand.
-- **Don't waste people's time.** Length follows audience. Anything a human will read — comments, PR bodies, docs, messages — is brief and high-level: the reader gets the point in one pass and moves on. Anything only an agent will read — skills, subagent definitions, `.prompt` and `.durable-context` documents — can be as dense as the job needs. When both will read it, write for the human.
+- **Don't waste people's time.** Length follows audience. Anything a human will read — comments, PR bodies, docs, messages — is brief and high-level: the reader gets the point in one pass and moves on. Anything only an agent will read — skills, subagent definitions, `.prompt` and `.context` documents — can be as dense as the job needs. When both will read it, write for the human.
 - **Durable over dated.** Anything that outlives the session is written for a reader who has none of this conversation. Describe the code and the decision, never the process, the review, or where we are in a plan.
 - **Tech debt is a tool, not a failure.** Wield it intentionally. It's also a great candidate for background agent work with human review — don't oversell agent output, just do the work and let me evaluate it.
 - **Detail-oriented in the long tail.** Parallel work is welcome. Background tasks, incremental cleanup, chipping away at things over time — that's the preferred mode.
@@ -116,7 +116,7 @@ Project tracking lives in Linear, not the repo. Don't commit planning files. Any
 - **`.plan`**: The goal and how we get there — strategy, pattern inventory, phase and wave breakdown. Humans read this one; keep it skimmable in one sitting. Write it before any code.
 - **`.prompt`**: Literal text to paste into a new agent session, standing alone with no other context. One per parallel workstream when the work fans out (`token-migration.bulk-1.prompt`). Agent-only; as dense as the job needs.
 - **`.manifest`**: Progress. What's done, what's in flight, what's next, with links to PRs. Update it as work lands so any session can pick up where the last one stopped.
-- **`.durable-context`**: Long-term memory for the effort — decisions, gotchas, file#line references, anything an agent would otherwise rediscover. Read it at the start of a session and write to it before context runs out.
+- **`.context`**: Long-term memory for the effort — decisions, gotchas, file#line references, anything an agent would otherwise rediscover. Read it at the start of a session and write to it before context runs out.
 
 Issues still track individual units of work (one per pattern or wave), with milestones for phases. The repo holds the code and the docs that describe it. When the effort produces something that stays true after it ships (how a system works, why an abstraction is shaped the way it is), that part moves into the repo as real documentation.
 
@@ -157,7 +157,7 @@ A meaningful share of my work is building tools for agents to use. The substrate
 
 - **Skills**: Reusable workflows invoked via the `Skill` tool or `/<name>` slash commands. Families include multi-agent coordination (`guild-*` — `guild-spawn`, `guild-plan`, `guild-validate`), execution loops (`ev-*` — `ev-run`, `ev-goal`, `ev-loop-interactive`, `ev-loop-confidence`), project lifecycle (`loom-*` — `loom-research`, `loom-plan`, `loom-archive`, and friends), and standalone utilities from `commons` (`grill-me`, `find-skills`, `review-skill`, `write-as-me`, `pr-comments`).
 - **Subagents**: Specialist agents invoked via the `Agent` tool. The guild families split by role: `research-*` gathers facts, `plan-*` contributes to design panels, `implementer-*` writes the code, `evaluator-*` reviews it as an antagonist, and `fixer-*` addresses what the evaluators flag. `commons` adds `writing-judge`, which scores drafts for `write-as-me`.
-- **Linear project resources**: `.plan`, `.prompt`, `.manifest`, and `.durable-context` documents that let fresh sessions pick up an effort, or run its waves in parallel, without the conversation that started it.
+- **Linear project resources**: `.plan`, `.prompt`, `.manifest`, and `.context` documents that let fresh sessions pick up an effort, or run its waves in parallel, without the conversation that started it.
 
 This is meta-work, but it compounds. A good skill, agent, or prompt file means every future session in that area starts closer to the right answer. Skill and agent families decay slowly enough that the names above are worth keeping current — but the authoritative inventory is whatever shows up in the runtime available-skills and available-subagents lists.
 
